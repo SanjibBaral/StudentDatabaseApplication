@@ -16,12 +16,14 @@ public class StudentDatabaseApp {
 		while(!stop_app)
 		{
 			StudentDatabaseApp.startUpMessage();
+			file.loadFile(); //loads current student data from file
 			System.out.println("Enter the operation number: ");
 			Scanner sc=new Scanner(System.in);
 			choice=sc.nextLine();
 			switch(choice) {
 			//Student Entry
 				case "1":
+					//Complete
 					System.out.println("You have selected to perform Student Entry.");
 					Student s=StudentDatabaseApp.StudentEntry();
 					file.addEntry(s);
@@ -29,7 +31,13 @@ public class StudentDatabaseApp {
 						
 			//Search Student and display Status
 				case "2":
+					String search_key=null;
 					System.out.println("You have selected to display status of a student.");
+					System.out.println("Enter date of birth in format MMDDYYYY:");
+					search_key=sc.nextLine();
+					System.out.println("Enter student first and last name without space with initial capitalized:");
+					search_key=search_key.concat(sc.nextLine());
+					file.viewStudent(search_key);
 					break;
 			
 			//Pay Tuition for a Student and update balance
@@ -44,9 +52,10 @@ public class StudentDatabaseApp {
 			
 			//Quit
 				case "5":
+					//Complete
 					System.out.println("You have selected to exit.");
 					//Saving student entry to file
-					file.loadFile();
+					
 					file.saveMap();
 					stop_app=true;
 					break;
@@ -70,12 +79,11 @@ public class StudentDatabaseApp {
 	}
 
 	private static Student StudentEntry() {
+		//Creates new entry for student and returns student object.
 		Student student=new Student();
 		student.enrollCourses();
 		student.payTuition();
 		//Check for Duplicate Entry
-		//Add Student Entry to File
-		//StudentDatabaseApp.student_objects.add(student);
 		return student;
 	}
 	

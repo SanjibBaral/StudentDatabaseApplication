@@ -18,6 +18,7 @@ public class StudentDatabaseFile {
 	FileOutputStream fos=null;
 	Properties props= new Properties();
 	static Map mp=new HashMap();
+	static String[] year= {"Freshman","Sophomore","Junior","Senior"};
 	
 	//Load Properties file data into map object
 	void loadFile() {
@@ -68,7 +69,27 @@ public class StudentDatabaseFile {
 		closeFile(true);
 	}
 	//Search Student entry in a file
-	
+	void viewStudent(String key) {
+		//Displays details on student by searching key in map object.
+		//Input: key - String (MMDDYYYYFirstnameLastname)
+		String DateOfBirth=key.substring(0,8);
+		String name=key.substring(8);
+		String value=(String) mp.get(key);
+		
+		//Stored value is string in format "gradeyear,balance,course1,course2,.."
+		String[] str_array=value.split(",");
+		
+		System.out.println("\n----Printing Student Status Detail------\n");
+		System.out.println("Name: "+ name);
+		System.out.println("Date of Birth:"+DateOfBirth);
+		System.out.println("Year: "+year[(Integer.parseInt(str_array[0])-1)]);
+		System.out.println("Balance: $"+str_array[1]);
+		System.out.print("Courses Enrolled: ");
+		for(int i=2;i<str_array.length;i++)
+			System.out.print(str_array[i]+",");
+		System.out.println("\n");
+		
+	}
 	//Compare duplicate entry in a file
 	
 	//Update entry in a file
@@ -106,10 +127,15 @@ public class StudentDatabaseFile {
 	
 	void printMap()
 	{
+		String key;
 		Set keys=mp.keySet();
 		System.out.println("Printing Map Object");
 		Iterator it=keys.iterator();
 		while(it.hasNext())
-			System.out.println(mp.get(it.next()));
+		{
+			key=(String) it.next();
+			System.out.print(key+": ");
+			System.out.println(mp.get(key));
+		}
 	}
 }
