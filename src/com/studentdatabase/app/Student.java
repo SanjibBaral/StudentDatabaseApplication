@@ -8,11 +8,14 @@ public class Student {
 	private String last_name;
 	private String grade_year;
 	private String id;
+	private String birth_year,birth_month,birth_day;
+	
 	ArrayList<String> courses_enrolled=new ArrayList<String>();
 	private int balance=0;
 	static final int course_cost=600;
 	static int object_count=1000;
-	static String[] courses= {"History101","Mathematics 101","English 101","Chemistry 101","Computer Science 101"};
+	static String[] courses= {"History 101","Mathematics 101","English 101","Chemistry 101","Computer Science 101"};
+	static String[] year= {"Freshman","Sophomore","Junior","Senior"};
 	static Scanner sc=new Scanner(System.in);
 	
 	//Student Constructor to prompt for student name and year
@@ -21,7 +24,15 @@ public class Student {
 		this.first_name=sc.nextLine();
 		System.out.println("\nEnter Last Name: ");
 		this.last_name=sc.nextLine();
-		System.out.println("\nEnter Year(1-9): ");
+		System.out.println("Enter Birthdate info:");
+		System.out.print("Year:");
+		this.birth_year=sc.nextLine();
+		System.out.print("\nMonth:");
+		this.birth_month=sc.nextLine();
+		System.out.print("\nDay:");
+		this.birth_day=sc.nextLine();
+		System.out.println("\nEnter Year: ");
+		System.out.println("\n1. Freshman\n2. Sophomore\n3. Junior\n4. Senior");
 		this.grade_year=sc.nextLine();
 		this.id=Student.generateID(this.grade_year);
 		Student.object_count++;	
@@ -83,6 +94,7 @@ public class Student {
 	void viewStatus() {
 		//print student name
 		System.out.println("\nStudent Name: "+this.first_name+" "+this.last_name);
+		System.out.println("Date of Birth: "+this.birth_month+"-"+this.birth_day+"-"+this.birth_year);
 		//print ID
 		System.out.println("ID: "+this.id);
 		//print courses enrolled
@@ -93,7 +105,21 @@ public class Student {
 		System.out.println("");
 		this.viewBalance();
 	}
+
+	String generateKey() {
+		//Returned string will be used as key to store info about student in a file.
+		// returned String Format: MMDDYYYYFirstnameLastName
+		return (this.birth_month+this.birth_day+this.birth_year+this.first_name+this.last_name);
+	}
 	
-	
+	String generateValue() {
+		//Returned string will be used
+		//returned string format: gradeYear,balance,Course1,Course2,..
+		String value=null;
+		value=this.grade_year+","+this.balance;
+		for(String course:this.courses_enrolled)
+			value=value+","+course;
+		return value;
+	}
 	
 }
