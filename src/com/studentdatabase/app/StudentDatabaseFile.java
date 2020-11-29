@@ -68,13 +68,15 @@ public class StudentDatabaseFile {
 		}
 		closeFile(true);
 	}
+	
 	//Search Student entry in a file
 	void viewStudent(String key) {
 		//Displays details on student by searching key in map object.
 		//Input: key - String (MMDDYYYYFirstnameLastname)
 		String DateOfBirth=key.substring(0,8);
 		String name=key.substring(8);
-		String value=(String) mp.get(key);
+		
+		String value=(String) mp.get(key); //get student record
 		
 		//Stored value is string in format "gradeyear,balance,course1,course2,.."
 		String[] str_array=value.split(",");
@@ -88,11 +90,63 @@ public class StudentDatabaseFile {
 		for(int i=2;i<str_array.length;i++)
 			System.out.print(str_array[i]+",");
 		System.out.println("\n");
+		System.out.println("Exiting View Student");
 		
 	}
+	
 	//Compare duplicate entry in a file
 	
 	//Update entry in a file
+	void updateBalance(String key, int amount_paid)
+	{
+		/*
+		 * This method update the balance for entry with key value 'key'.
+		 */
+		String value=(String) mp.get(key); //get student record
+		int updated_balance;
+		//Stored value is string in format "gradeyear,balance,course1,course2,.."
+		String[] str_array=value.split(",");
+		updated_balance=Integer.parseInt(str_array[1])-amount_paid;
+		str_array[1]=Integer.toString(updated_balance);
+		value="";
+		System.out.println("Outside For loop");
+		for(String str:str_array)
+		{
+			System.out.println("Inside For loop");
+			if(value.isEmpty())
+				value=str;
+			else
+				value=value+","+str;
+		}
+		System.out.println("Value: "+value);
+		mp.put(key, value);
+	}
+	String returnBalance(String key)
+	{
+		/*
+		 * This method accepts a key, access value for the key in the Map Object, and
+		 * returns balance for the specific record as string.
+		 */
+		String value=(String) mp.get(key); //get student record
+		
+		//Stored value is string in format "gradeyear,balance,course1,course2,.."
+		String[] str_array=value.split(",");
+		return str_array[1];
+	}
+	
+	int returnYear(String key)
+	{
+		/*
+		 * This method accepts a key, access value for the key in the Map Object, and
+		 * returns grade year for the specific record as integer.
+		 */
+		String value=(String) mp.get(key); //get student record
+		
+		//Stored value is string in format "gradeyear,balance,course1,course2,.."
+		String[] str_array=value.split(",");
+		return Integer.parseInt(str_array[0]);
+	}
+	
 	
 	//Report Generation
 	

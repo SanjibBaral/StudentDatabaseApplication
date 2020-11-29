@@ -6,19 +6,20 @@ import java.util.Scanner;
 public class StudentDatabaseApp {
 	
 	static ArrayList<Student> student_objects=new ArrayList<Student>();
+	static Scanner sc=new Scanner(System.in);
 	
 	public static void main(String[] args) {
 		//Display list of choices for User to select
 		String choice;
 		StudentDatabaseFile file=new StudentDatabaseFile();
 		boolean stop_app=false;
+		String search_key=null;
+		file.loadFile(); //loads current student data from file
 		
 		while(!stop_app)
 		{
 			StudentDatabaseApp.startUpMessage();
-			file.loadFile(); //loads current student data from file
 			System.out.println("Enter the operation number: ");
-			Scanner sc=new Scanner(System.in);
 			choice=sc.nextLine();
 			switch(choice) {
 			//Student Entry
@@ -31,18 +32,21 @@ public class StudentDatabaseApp {
 						
 			//Search Student and display Status
 				case "2":
-					String search_key=null;
-					System.out.println("You have selected to display status of a student.");
-					System.out.println("Enter date of birth in format MMDDYYYY:");
-					search_key=sc.nextLine();
-					System.out.println("Enter student first and last name without space with initial capitalized:");
-					search_key=search_key.concat(sc.nextLine());
+					//Complete
+					search_key=StudentDatabaseApp.askStudentInfo();
 					file.viewStudent(search_key);
 					break;
 			
 			//Pay Tuition for a Student and update balance
 				case "3":
 					System.out.println("You have selected to pay tuition.");
+					search_key=StudentDatabaseApp.askStudentInfo();
+					System.out.println("Current balance is: "+file.returnBalance(search_key));
+					System.out.println("Enter amount you want to pay: ");
+					int amount_paid=Integer.parseInt(sc.nextLine());
+					file.updateBalance(search_key,amount_paid);
+					System.out.println("\n*******Balance Updated************");
+					file.viewStudent(search_key);
 					break;
 			
 			//Run Report
@@ -62,20 +66,6 @@ public class StudentDatabaseApp {
 			
 			}
 		}
-		
-		/*
-		//Ask how many students to enter
-		int student_no;
-		Scanner sc=new Scanner(System.in);
-		System.out.println("Enter no. of students to enroll.");
-		student_no=sc.nextInt();
-		
-		//CreateStudentObject
-		for(int i=0;i<student_no;i++)
-			StudentDatabaseApp.StudentEntry();
-		StudentDatabaseApp.displayStudents();
-		sc.close();
-		*/
 	}
 
 	private static Student StudentEntry() {
@@ -85,11 +75,6 @@ public class StudentDatabaseApp {
 		student.payTuition();
 		//Check for Duplicate Entry
 		return student;
-	}
-	
-	private static void displayStudents() {
-		for(Student student:StudentDatabaseApp.student_objects)
-			student.viewStatus();
 	}
 	
 	static void startUpMessage() {
@@ -104,5 +89,17 @@ public class StudentDatabaseApp {
 		for(int i=0;i<count;i++)
 			System.out.print("*");
 		System.out.println("\n");
+	}
+	static String askStudentInfo() {
+		/*
+		 * Prompts user to enter Date of Birth and Student Name
+		 * Returns date of birth and student name combined as string.
+		 */
+		String search_key=null;
+		System.out.println("Enter date of birth in format MMDDYYYY:");
+		search_key=sc.nextLine();
+		System.out.println("Enter student first and last name without space with initial capitalized:");
+		search_key=search_key.concat(sc.nextLine());
+		return search_key;
 	}
 }
